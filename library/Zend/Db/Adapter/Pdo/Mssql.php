@@ -102,6 +102,16 @@ class Zend_Db_Adapter_Pdo_Mssql extends Zend_Db_Adapter_Pdo_Abstract
         // @see http://www.php.net/manual/en/ref.pdo-dblib.connection.php
         if (isset($dsn['pdoType'])) {
             switch (strtolower($dsn['pdoType'])) {
+                case 'odbc':
+                    $this->_pdoType  = 'odbc';
+                    $dsn['DATABASE'] = $this->_config['dbname'];
+                    $dsn['DRIVER']   = '{SQL Server}';
+                    $dsn['SERVER']   = $this->_config['host'];
+                    if (!$this->_config['username'] && !$this->_config['password'])
+                    {
+                        $dsn['Trusted_Connection'] = "yes";
+                    }
+                    break;
                 case 'freetds':
                 case 'sybase':
                     $this->_pdoType = 'sybase';
